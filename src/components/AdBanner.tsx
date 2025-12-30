@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { useAppStore } from '@/store/useAppStore';
+import { useRef, useState, useCallback } from 'react';
 import Script from 'next/script';
 
 interface AdBannerProps {
@@ -10,30 +9,10 @@ interface AdBannerProps {
 }
 
 export default function AdBanner({ className, style }: AdBannerProps) {
-  const { isAdsRemoved } = useAppStore();
   const adRef = useRef<HTMLModElement>(null);
   const adSenseClientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
   const adSenseSlotId = process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID;
-
-  useEffect(() => {
-    if (isAdsRemoved || !adSenseClientId || !adSenseSlotId) {
-      return;
-    }
-
-    // Initialize AdSense ad after script loads
-    if (window.adsbygoogle && adRef.current) {
-      try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      } catch (error) {
-        console.error('AdSense error:', error);
-      }
-    }
-  }, [isAdsRemoved, adSenseClientId, adSenseSlotId]);
-
-  // Don't render ads if removed
-  if (isAdsRemoved) {
-    return null;
-  }
+  const [adInitialized, setAdInitialized] = useState(false);
 
   // Show placeholder in development when AdSense is not configured
   if (!adSenseClientId || !adSenseSlotId) {
@@ -54,6 +33,23 @@ export default function AdBanner({ className, style }: AdBannerProps) {
     );
   }
 
+  const initializeAd = useCallback(() => {
+    if (adInitialized || !adRef.current || !window.adsbygoogle) {
+      return;
+    }
+
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      setAdInitialized(true);
+    } catch (error) {
+      console.error('AdSense error:', error);
+    }
+  }, [adInitialized]);
+
+  const handleScriptLoad = () => {
+    initializeAd();
+  };
+
   return (
     <>
       {/* Load AdSense script */}
@@ -62,6 +58,7 @@ export default function AdBanner({ className, style }: AdBannerProps) {
         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adSenseClientId}`}
         strategy="lazyOnload"
         crossOrigin="anonymous"
+        onLoad={handleScriptLoad}
       />
       
       {/* Ad container */}
