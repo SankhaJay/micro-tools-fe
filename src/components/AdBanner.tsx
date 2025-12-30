@@ -11,7 +11,7 @@ interface AdBannerProps {
 
 export default function AdBanner({ className, style }: AdBannerProps) {
   const { isAdsRemoved } = useAppStore();
-  const adRef = useRef<HTMLDivElement>(null);
+  const adRef = useRef<HTMLModElement>(null);
   const adSenseClientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
   const adSenseSlotId = process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID;
 
