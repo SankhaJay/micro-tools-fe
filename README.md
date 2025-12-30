@@ -2,6 +2,22 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Environment Variables
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```env
+# API Configuration
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3001
+
+# Google AdSense Configuration (optional for development)
+NEXT_PUBLIC_ADSENSE_CLIENT_ID=ca-pub-xxxxxxxxxxxxxxxx
+NEXT_PUBLIC_ADSENSE_SLOT_ID=xxxxxxxxxx
+NEXT_PUBLIC_ADSENSE_INTERSTITIAL_SLOT_ID=xxxxxxxxxx
+```
+
+### Development
+
 First, run the development server:
 
 ```bash
