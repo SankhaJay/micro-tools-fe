@@ -30,9 +30,28 @@ export default function AdBanner({ className, style }: AdBannerProps) {
     }
   }, [isAdsRemoved, adSenseClientId, adSenseSlotId]);
 
-  // Don't render ads if removed or missing config
-  if (isAdsRemoved || !adSenseClientId || !adSenseSlotId) {
+  // Don't render ads if removed
+  if (isAdsRemoved) {
     return null;
+  }
+
+  // Show placeholder in development when AdSense is not configured
+  if (!adSenseClientId || !adSenseSlotId) {
+    return (
+      <div
+        className={`${className || ''} flex items-center justify-center bg-gray-200 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-8 min-h-[100px]`}
+        style={style}
+      >
+        <div className="text-center">
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+            Ad Banner Placeholder
+          </p>
+          <p className="text-xs text-gray-500 dark:text-gray-500">
+            Configure AdSense in .env.local to show ads
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
