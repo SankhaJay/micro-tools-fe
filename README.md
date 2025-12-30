@@ -7,6 +7,9 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 Create a `.env.local` file in the root directory with the following variables:
 
 ```env
+# Site Configuration (for SEO)
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
 # API Configuration
 NEXT_PUBLIC_API_BASE_URL=http://localhost:3001
 
@@ -35,6 +38,28 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## SEO Optimization
+
+This app is fully optimized for search engines with:
+
+- **Metadata**: Comprehensive meta tags, Open Graph, and Twitter Card support
+- **Structured Data**: JSON-LD schema markup for better search engine understanding
+- **Sitemap**: Automatic sitemap generation at `/sitemap.xml`
+- **Robots.txt**: Proper robots.txt configuration at `/robots.txt`
+- **Semantic HTML**: Proper heading hierarchy and semantic elements
+- **Canonical URLs**: Prevents duplicate content issues
+
+### SEO Features
+
+- Page-specific metadata for each tool
+- Open Graph tags for social media sharing
+- Twitter Card support
+- Structured data (Schema.org) for rich snippets
+- Automatic sitemap generation
+- SEO-friendly URLs
+
+Make sure to set `NEXT_PUBLIC_SITE_URL` in your environment variables for production to ensure all SEO features work correctly.
 
 ## Learn More
 
