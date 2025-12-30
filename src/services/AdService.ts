@@ -1,17 +1,13 @@
-import { useAppStore } from '@/store/useAppStore';
-
 /**
  * AdService - Utility functions for ad management
  */
 
 /**
  * Check if ads should be displayed
- * Note: This function uses getState() to access store outside of React components
  */
 export function shouldShowAds(): boolean {
-  // Use getState() to access store without hooks
-  const store = useAppStore.getState();
-  return !store.isAdsRemoved;
+  // Ads are always shown (no removal feature implemented yet)
+  return true;
 }
 
 /**
