@@ -2,6 +2,10 @@
 
 import QRCode from 'qrcode';
 
+// QR Code generation constants
+const DEFAULT_QR_CODE_WIDTH = 300;
+const DEFAULT_QR_CODE_MARGIN = 1;
+
 export interface QrCodeGenerationOptions {
   text: string;
   errorCorrectionLevel?: 'L' | 'M' | 'Q' | 'H';
@@ -37,8 +41,8 @@ export async function generateQrCode(
 
     const {
       errorCorrectionLevel = 'M',
-      width = 300,
-      margin = 1,
+      width = DEFAULT_QR_CODE_WIDTH,
+      margin = DEFAULT_QR_CODE_MARGIN,
       color = {},
     } = options;
 
@@ -82,12 +86,16 @@ export async function generateQrCodeCanvas(
 
     const {
       errorCorrectionLevel = 'M',
-      width = 300,
-      margin = 1,
+      width = DEFAULT_QR_CODE_WIDTH,
+      margin = DEFAULT_QR_CODE_MARGIN,
       color = {},
     } = options;
 
-    const canvas = await QRCode.toCanvas(options.text, {
+    // Create a canvas element first
+    const canvas = document.createElement('canvas');
+
+    // Pass canvas as first argument, then text, then options
+    await QRCode.toCanvas(canvas, options.text, {
       errorCorrectionLevel,
       width,
       margin,
@@ -118,20 +126,59 @@ export function downloadQrCode(dataUrl: string, filename: string = 'qrcode.png')
   const link = document.createElement('a');
   link.href = dataUrl;
   link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  // Hide the link element to prevent DOM interference
+  link.style.display = 'none';
+  
+  try {
+    document.body.appendChild(link);
+    link.click();
+  } finally {
+    // Ensure cleanup happens even if click() throws an error
+    if (link.parentNode) {
+      document.body.removeChild(link);
+    }
+  }
+}
+
+export interface CopyToClipboardResult {
+  success: boolean;
+  error?: string;
 }
 
 /**
  * Copies a QR code image to clipboard
  * @param dataUrl The data URL of the QR code image
- * @returns Promise that resolves when the image is copied
+ * @returns Promise that resolves with a result object containing success status and error message if failed
  */
-export async function copyQrCodeToClipboard(dataUrl: string): Promise<boolean> {
+export async function copyQrCodeToClipboard(
+  dataUrl: string
+): Promise<CopyToClipboardResult> {
   try {
+    // Check if clipboard API is supported
+    if (!navigator.clipboard) {
+      return {
+        success: false,
+        error: 'Clipboard API is not supported in this browser. Please use a modern browser or try downloading the image instead.',
+      };
+    }
+
+    // Check if ClipboardItem is supported (required for image copying)
+    if (!window.ClipboardItem) {
+      return {
+        success: false,
+        error: 'Image clipboard copying is not supported in this browser. Please use a modern browser or try downloading the image instead.',
+      };
+    }
+
     // Convert data URL to blob
     const response = await fetch(dataUrl);
+    if (!response.ok) {
+      return {
+        success: false,
+        error: 'Failed to convert QR code image. Please try generating a new QR code.',
+      };
+    }
+
     const blob = await response.blob();
 
     // Copy to clipboard
@@ -141,10 +188,28 @@ export async function copyQrCodeToClipboard(dataUrl: string): Promise<boolean> {
       }),
     ]);
 
-    return true;
-  } catch (error) {
-    console.error('Failed to copy QR code to clipboard:', error);
-    return false;
+    return { success: true };
+  } catch (error: any) {
+    // Handle specific error cases
+    let errorMessage = 'Failed to copy QR code to clipboard.';
+
+    if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+      errorMessage =
+        'Clipboard permission denied. Please allow clipboard access in your browser settings and try again.';
+    } else if (error.name === 'SecurityError') {
+      errorMessage =
+        'Clipboard access blocked for security reasons. Please ensure you are using HTTPS or localhost.';
+    } else if (error.name === 'DataError') {
+      errorMessage =
+        'The clipboard data format is not supported. Please try downloading the image instead.';
+    } else if (error.name === 'TypeError' || error.message) {
+      errorMessage = error.message || errorMessage;
+    }
+
+    return {
+      success: false,
+      error: errorMessage,
+    };
   }
 }
 

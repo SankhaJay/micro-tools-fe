@@ -5,6 +5,7 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Card from '@/components/Card';
 import AdBanner from '@/components/AdBanner';
+import { useToast } from '@/contexts/ToastContext';
 import {
   generateQrCode,
   downloadQrCode,
@@ -12,13 +13,18 @@ import {
   QrCodeGenerationOptions,
 } from '@/services/QrCodeService';
 
+// QR Code generation constants
+const DEFAULT_QR_CODE_WIDTH = 300;
+const DEFAULT_QR_CODE_MARGIN = 1;
+
 export default function QrCodeGeneratorPage() {
+  const { showToast } = useToast();
   const [inputText, setInputText] = useState('');
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorCorrectionLevel, setErrorCorrectionLevel] = useState<'L' | 'M' | 'Q' | 'H'>('M');
-  const [qrSize, setQrSize] = useState(300);
+  const [qrSize, setQrSize] = useState(DEFAULT_QR_CODE_WIDTH);
 
   const handleGenerate = useCallback(async () => {
     if (!inputText.trim()) {
@@ -33,7 +39,7 @@ export default function QrCodeGeneratorPage() {
       text: inputText.trim(),
       errorCorrectionLevel,
       width: qrSize,
-      margin: 1,
+      margin: DEFAULT_QR_CODE_MARGIN,
     };
 
     const result = await generateQrCode(options);
@@ -57,15 +63,14 @@ export default function QrCodeGeneratorPage() {
 
   const handleCopy = useCallback(async () => {
     if (qrCodeDataUrl) {
-      const success = await copyQrCodeToClipboard(qrCodeDataUrl);
-      if (success) {
-        // Show temporary success message (you could use a toast library here)
-        alert('QR code copied to clipboard!');
+      const result = await copyQrCodeToClipboard(qrCodeDataUrl);
+      if (result.success) {
+        showToast('QR code copied to clipboard!', 'success');
       } else {
-        alert('Failed to copy QR code to clipboard');
+        showToast(result.error || 'Failed to copy QR code to clipboard', 'error');
       }
     }
-  }, [qrCodeDataUrl]);
+  }, [qrCodeDataUrl, showToast]);
 
   const handleClear = useCallback(() => {
     setInputText('');
