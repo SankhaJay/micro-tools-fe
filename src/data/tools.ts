@@ -41,8 +41,8 @@ export const tools: Tool[] = [
     name: 'QR Code Generator',
     description: 'Generate QR codes for text, URLs, and more',
     icon: '📱',
-    href: '/qr-generator',
-    available: false,
+    href: '/qr-code-generator',
+    available: true,
     category: 'generator',
   },
   {
@@ -50,8 +50,8 @@ export const tools: Tool[] = [
     name: 'QR Code Scanner',
     description: 'Scan QR codes using your camera',
     icon: '📷',
-    href: '/qr-scanner',
-    available: false,
+    href: '/qr-code-scanner',
+    available: true,
     category: 'scanner',
   },
   {
