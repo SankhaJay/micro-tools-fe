@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 
 interface CardProps {
-  title: string;
+  title?: string;
   description?: string;
   icon?: React.ReactNode;
   href?: string;
@@ -31,7 +31,7 @@ export default function Card({
       onClick={onClick}
     >
       {icon && <div className="mb-4 text-4xl">{icon}</div>}
-      <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">{title}</h3>
+      {title && <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">{title}</h3>}
       {description && (
         <p className="text-gray-700 dark:text-gray-300 text-sm mb-4">{description}</p>
       )}
