@@ -239,7 +239,7 @@ export default function JsonFormatterPage() {
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
             JSON Formatter
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
+          <p className="text-lg text-gray-700 dark:text-gray-300">
             Format, minify, validate, and beautify JSON with syntax highlighting
           </p>
         </header>
@@ -262,9 +262,9 @@ export default function JsonFormatterPage() {
           </div>
 
           <div className="flex items-center gap-2 ml-auto">
-            <label className="text-sm text-gray-600 dark:text-gray-400">
-              Indent:
-            </label>
+                <label className="text-sm text-gray-900 dark:text-gray-100">
+                  Indent:
+                </label>
             <select
               value={indent}
               onChange={(e) => setIndent(Number(e.target.value) as 2 | 4)}
@@ -276,9 +276,9 @@ export default function JsonFormatterPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-600 dark:text-gray-400">
-              Theme:
-            </label>
+                <label className="text-sm text-gray-900 dark:text-gray-100">
+                  Theme:
+                </label>
             <select
               value={theme}
               onChange={(e) => setTheme(e.target.value as 'light' | 'dark')}
