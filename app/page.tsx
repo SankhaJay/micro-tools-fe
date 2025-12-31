@@ -57,6 +57,13 @@ export default function Home() {
         <div className="container mx-auto px-4 py-8 max-w-7xl">
           {/* Header */}
           <header className="text-center mb-12">
+            <div className="flex justify-center mb-4">
+              <img
+                src="/logo.png"
+                alt="Micro Tools Logo"
+                className="h-16 w-auto"
+              />
+            </div>
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
               Micro Tools
             </h1>

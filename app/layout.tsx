@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     description: "Free online utility tools including JSON formatter, unit converter, text case converter, QR code generator, PDF tools, and more.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/logo.png",
         width: 1200,
         height: 630,
         alt: "Micro Tools",
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Micro Tools - Free Online Utility Tools",
     description: "Free online utility tools including JSON formatter, unit converter, text case converter, QR code generator, PDF tools, and more.",
-    images: ["/og-image.png"],
+    images: ["/logo.png"],
   },
   robots: {
     index: true,
@@ -71,6 +71,10 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
+  },
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
   },
   verification: {
     // Add your verification codes here when available
