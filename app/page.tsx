@@ -79,9 +79,9 @@ export default function Home() {
           {/* Tools Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {filteredTools.map((tool) => (
-              <div key={tool.id} onClick={() => handleToolClick(tool)}>
+              <div key={tool.id} onClick={() => handleToolClick(tool)} className="flex flex-col">
                 {tool.available ? (
-                  <Link href={tool.href} className="block">
+                  <Link href={tool.href} className="flex-1 flex flex-col">
                     <Card
                       title={tool.name}
                       description={tool.description}
@@ -90,7 +90,7 @@ export default function Home() {
                     />
                   </Link>
                 ) : (
-                  <div className="relative">
+                  <div className="relative flex-1 flex flex-col">
                     <Card
                       title={tool.name}
                       description={tool.description}

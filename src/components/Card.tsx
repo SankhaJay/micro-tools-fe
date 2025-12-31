@@ -25,15 +25,16 @@ export default function Card({
       className={`
         bg-white dark:bg-gray-800 rounded-lg shadow-md p-6
         transition-all duration-200
+        flex flex-col
         ${href || onClick ? 'cursor-pointer hover:shadow-lg hover:scale-105' : ''}
         ${className}
       `}
       onClick={onClick}
     >
-      {icon && <div className="mb-4 text-4xl">{icon}</div>}
-      {title && <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">{title}</h3>}
+      {icon && <div className="mb-4 text-4xl flex-shrink-0">{icon}</div>}
+      {title && <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2 flex-shrink-0">{title}</h3>}
       {description && (
-        <p className="text-gray-700 dark:text-gray-300 text-sm mb-4">{description}</p>
+        <p className="text-gray-700 dark:text-gray-300 text-sm mb-4 flex-grow">{description}</p>
       )}
       {children}
     </div>
