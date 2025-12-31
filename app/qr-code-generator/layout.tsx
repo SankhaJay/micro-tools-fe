@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     url: `${siteUrl}/qr-code-generator`,
     images: [
       {
-        url: `${siteUrl}/og-qr-generator.jpg`,
+        url: `${siteUrl}/logo.png`,
         width: 1200,
         height: 630,
         alt: 'QR Code Generator Tool',
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     title: 'QR Code Generator - Create QR Codes Online for Free',
     description:
       'Generate QR codes instantly from text, URLs, or any string. Free online QR code generator with customizable size and error correction levels.',
-    images: [`${siteUrl}/twitter-qr-generator.jpg`],
+    images: [`${siteUrl}/logo.png`],
   },
   alternates: {
     canonical: `${siteUrl}/qr-code-generator`,
