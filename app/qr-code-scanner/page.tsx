@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Html5Qrcode } from 'html5-qrcode';
 import Button from '@/components/Button';
 import Card from '@/components/Card';
 import AdBanner from '@/components/AdBanner';
+
+// Type for Html5Qrcode (will be dynamically imported)
+type Html5Qrcode = any;
 
 // Suppress html5-qrcode DOM errors and media AbortErrors globally (runs immediately on module load)
 if (typeof window !== 'undefined') {
@@ -162,6 +164,11 @@ export default function QrCodeScannerPage() {
 
   // Get available cameras on mount (try to get devices, but don't require permissions)
   useEffect(() => {
+    // Only run in browser
+    if (typeof window === 'undefined' || !navigator.mediaDevices) {
+      return;
+    }
+
     const getCameras = async () => {
       try {
         // Try to enumerate devices - might not have labels until permissions are granted
@@ -177,9 +184,15 @@ export default function QrCodeScannerPage() {
     };
 
     getCameras();
-  }, []);
+  }, [cameraId]);
 
   const startScanning = useCallback(async () => {
+    // Ensure we're in the browser
+    if (typeof window === 'undefined') {
+      setError('Camera access is only available in the browser');
+      return;
+    }
+
     const scanAreaElement = document.getElementById('qr-reader');
     if (!scanAreaElement) {
       setError('Scan area not found');
@@ -191,6 +204,9 @@ export default function QrCodeScannerPage() {
       setCameraPermissionError(false);
       setScannedResult(null);
 
+      // Dynamically import html5-qrcode to avoid SSR issues
+      const { Html5Qrcode } = await import('html5-qrcode');
+      
       const scanAreaId = 'qr-reader';
       
       // Create a new instance - this will handle the container
@@ -252,11 +268,21 @@ export default function QrCodeScannerPage() {
       }
     } catch (err: any) {
       console.error('Error starting scanner:', err);
-      setError(err.message || 'Failed to start camera');
-      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+      
+      // Provide more helpful error messages
+      let errorMessage = 'Failed to start camera';
+      if (err.message) {
+        errorMessage = err.message;
+      } else if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        errorMessage = 'Camera permission denied. Please allow camera access and try again.';
         setCameraPermissionError(true);
-        setError('Camera permission denied. Please allow camera access and try again.');
+      } else if (err.name === 'NotFoundError') {
+        errorMessage = 'No camera found. Please connect a camera and try again.';
+      } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+        errorMessage = 'Camera is already in use by another application.';
       }
+      
+      setError(errorMessage);
       setIsScanning(false);
       if (scannerRef.current) {
         try {
