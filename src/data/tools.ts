@@ -46,15 +46,6 @@ export const tools: Tool[] = [
     category: 'generator',
   },
   {
-    id: 'qr-scanner',
-    name: 'QR Code Scanner',
-    description: 'Scan QR codes using your camera',
-    icon: '📷',
-    href: '/qr-code-scanner',
-    available: true,
-    category: 'scanner',
-  },
-  {
     id: 'pdf-to-image',
     name: 'PDF to Image',
     description: 'Convert PDF files to images',

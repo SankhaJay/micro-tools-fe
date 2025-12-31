@@ -194,6 +194,8 @@ todos:
 - [x] **json-formatter-utils** - Create utility components (CopyButton, DownloadButton, FileUpload)
 - [x] **json-formatter-page** - Implement JsonFormatterPage with input/output editors, action buttons, and error display
 - [x] **json-formatter-features** - Add advanced features (indentation options, theme support, large file handling)
+- [x] **seo-optimization** - Implement SEO optimization (metadata, sitemap, robots.txt)
+- [x] **qr-code-generator** - Implement QR code generator page - Phase 1.5
 
 #### Backend (micro-tools-app)
 - [x] **setup-backend-repo** - Create micro-tools-app repository, initialize Express server with TypeScript
@@ -201,8 +203,6 @@ todos:
 
 ### 📋 Pending Tasks
 
-#### Frontend (micro-tools-fe) - Next Priority
-- [ ] **qr-tools** - Implement QR code generator and scanner pages with web camera API (getUserMedia) - **NEXT FOCUS**
 
 #### Frontend (micro-tools-fe) - Phase 2
 - [ ] **text-case-converter** - Build TextCaseConverterPage with all case transformation options (client-side)
@@ -304,7 +304,7 @@ Two separate repositories:
 - **HTTP Client**: Axios with interceptors
 - **JSON Formatting**: react-syntax-highlighter (for syntax highlighting in JSON editor)
 - **PDF/Image**: pdf.js (for PDF viewing), HTML5 File API (for file uploads), sharp/browser-image-compression (client-side image processing) - Phase 2
-- **QR Code**: qrcode.js (generator), html5-qrcode (scanner with web camera) - **Next Priority**
+- **QR Code**: qrcode.js (generator) - **COMPLETED** (scanner removed)
 - **Storage**: localStorage for user preferences
 - **Ads**: Google AdSense (banner and display ads)
 - **Styling**: Tailwind CSS or CSS Modules
@@ -343,8 +343,7 @@ Each tool follows a consistent pattern:
 **Individual Tool Pages (in micro-tools-fe):**
 
 - `src/pages/JsonFormatterPage.tsx` - **MVP FOCUS**: Format, minify, validate, and beautify JSON
-- `src/pages/QrCodeGeneratorPage.tsx` - **NEXT PRIORITY**: Generate QR codes
-- `src/pages/QrCodeScannerPage.tsx` - **NEXT PRIORITY**: Scan QR codes (uses web camera API)
+- `app/qr-code-generator/page.tsx` - **COMPLETED**: Generate QR codes
 - `src/pages/PdfToImagePage.tsx` - PDF upload → image conversion (Phase 2)
 - `src/pages/ImageToPdfPage.tsx` - Image upload → PDF creation (Phase 2)
 - `src/pages/TextCaseConverterPage.tsx` - Text transformation (Phase 2)
@@ -410,11 +409,14 @@ Each tool follows a consistent pattern:
   - ARIA labels for buttons
   - Focus management
 
-### QR Code Tools (`micro-tools-fe/src/services/QrCodeService.ts`) - Next Priority
+### QR Code Generator (`micro-tools-fe/src/services/QrCodeService.ts`) - **COMPLETED**
 
 - **Generator**: Client-side QR code generation using qrcode.js
-- **Scanner**: Web camera API (getUserMedia) with html5-qrcode library
-- **Edge Cases**: Handle camera permissions, unsupported browsers, invalid QR data
+- **Status**: ✅ Implemented and available
+- **Features**: Generate QR codes from text/URL, customizable error correction levels, size options, download/copy functionality
+- **Edge Cases**: Handle invalid input, large text input
+
+**Note**: QR code scanner functionality was removed due to production deployment issues with camera API. Only QR code generator remains available.
 
 ### Unit Converter (`micro-tools-fe/src/services/UnitConverterService.ts`) - Phase 3 (Deprioritized)
 
@@ -460,12 +462,6 @@ Each tool follows a consistent pattern:
 - **Output**: Image (PNG/SVG) that can be downloaded/shared
 - **Customization**: Size, error correction level, colors
 
-### QR Code Scanner (`micro-tools-fe/src/services/QrCodeScannerService.ts`)
-
-- **Client-side**: Camera-based scanning using html5-qrcode
-- **Permissions**: Browser camera access (getUserMedia API)
-- **Output**: Decoded text/data
-- **Actions**: Copy to clipboard, open URL, share
 
 ## Ad Monetization Strategy
 
@@ -567,7 +563,6 @@ Each tool follows a consistent pattern:
 
 ### Permissions
 
-- Camera: Browser permission prompt for QR scanner (getUserMedia API)
 - Storage: Browser localStorage for preferences, no file system access needed
 - Network: Required for backend calls
 
@@ -621,20 +616,18 @@ Each tool follows a consistent pattern:
 - [x] Health check endpoint
 - [x] (No backend needed for JSON formatter - fully client-side)
 
-### Phase 1.5: QR Code Tools - Next Priority (1 week)
+### Phase 1.5: QR Code Generator - **COMPLETED** (1 week)
 
 **micro-tools-fe:**
 
-- [ ] QR code generator page
-  - [ ] Install qrcode.js dependency
-  - [ ] Create QrCodeService for generation logic
-  - [ ] Build QrCodeGeneratorPage with input options (text, URL, etc.)
-  - [ ] Add download/copy functionality for generated QR codes
-- [ ] QR code scanner page
-  - [ ] Install html5-qrcode dependency
-  - [ ] Create QrCodeScannerPage with web camera access
-  - [ ] Handle camera permissions and errors
-  - [ ] Display scanned results
+- [x] QR code generator page
+  - [x] Install qrcode.js dependency
+  - [x] Create QrCodeService for generation logic
+  - [x] Build QrCodeGeneratorPage with input options (text, URL, etc.)
+  - [x] Add download/copy functionality for generated QR codes
+  - [x] SEO metadata for QR code generator page
+
+**Note**: QR code scanner functionality was removed due to production deployment issues with camera API and html5-qrcode library. Only QR code generator remains available.
 
 ### Phase 2: Additional Tools (2-3 weeks)
 
@@ -700,11 +693,11 @@ Each tool follows a consistent pattern:
 - `src/store/useAppStore.ts` - Zustand store (already created)
 - `src/config/api.ts` - API configuration (already created)
 
-**micro-tools-fe (Frontend) - Phase 1.5 (Next Priority):**
+**micro-tools-fe (Frontend) - Phase 1.5 (COMPLETED):**
 
-- `src/pages/QrCodeGeneratorPage.tsx` - QR code generator page
-- `src/pages/QrCodeScannerPage.tsx` - QR code scanner page (web camera)
-- `src/services/QrCodeService.ts` - QR code generation and scanning logic
+- `app/qr-code-generator/page.tsx` - QR code generator page ✅
+- `app/qr-code-generator/layout.tsx` - SEO metadata ✅
+- `src/services/QrCodeService.ts` - QR code generation logic ✅
 
 **micro-tools-fe (Frontend) - Phase 2:**
 
@@ -712,8 +705,6 @@ Each tool follows a consistent pattern:
 - `src/pages/ImageToPdfPage.tsx`
 - `src/pages/TextCaseConverterPage.tsx`
 - `src/pages/SpeedTestPage.tsx`
-- `src/pages/QrCodeGeneratorPage.tsx`
-- `src/pages/QrCodeScannerPage.tsx`
 
 **micro-tools-app (Backend):**
 
